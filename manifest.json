@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.surfacedp.xmb-menu",
+  "name": "XMB Menu",
+  "version": "1.3.1",
+  "author": "Patrick",
+  "description": "A full-screen, PS3-inspired XMB interface for the Omarchy menu",
+  "kinds": [
+    "menu",
+    "bar-widget"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "menu": "Menu.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.menu"
+  },
+  "barWidget": {
+    "displayName": "XMB Menu",
+    "description": "Launches the PS3-inspired Omarchy menu",
+    "category": "Compositor",
+    "allowMultiple": false
+  }
+}
