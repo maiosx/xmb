@@ -29,7 +29,7 @@ application data already provided by the system.
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/maiosx/xmb.git --enable
+omarchy plugin add https://github.com/surfacedP/omarchy-xmb-menu.git --enable
 ```
 
 Enabling the plugin routes the existing Omarchy menu shortcut to the XMB
@@ -50,7 +50,7 @@ interface. The packaged menu is not modified.
 ## Update
 
 ```bash
-omarchy plugin update io.github.surfacedp.xmb-menu
+omarchy plugin update io.github.maiosx.xmb
 ```
 
 ## Disable or remove
@@ -58,13 +58,13 @@ omarchy plugin update io.github.surfacedp.xmb-menu
 Disable the XMB interface while keeping it installed:
 
 ```bash
-omarchy plugin disable io.github.surfacedp.xmb-menu
+omarchy plugin disable io.github.maiosx.xmb
 ```
 
 Remove it completely:
 
 ```bash
-omarchy plugin remove io.github.surfacedp.xmb-menu
+omarchy plugin remove io.github.maiosx.xmb
 ```
 
 Disabling or removing the plugin restores the packaged `omarchy.menu`. Your
