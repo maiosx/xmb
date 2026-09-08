@@ -70,8 +70,9 @@ Item {
   // alongside this plugin (see gamepad-bridge.py for the button/axis
   // mapping). It prints one navigation token per line ("up", "confirm",
   // etc.) which we feed into the same dispatchAction() used for keyboard
-  // input. Only runs while the menu is visible, same as the wallpaper
-  // resolver above; python-evdev not being installed just means no
+  // input. Runs continuously (the plugin is already keepLoaded) rather than
+  // only while open, so the Guide/PS button can summon the menu the same
+  // way SUPER+SPACE does; python-evdev not being installed just means no
   // gamepad input, not a startup failure.
   function localPath(url) {
     var s = url.toString()
@@ -81,7 +82,7 @@ Item {
 
   Process {
     id: gamepadBridge
-    running: root.opened
+    running: true
     command: ["python3", "-u", root.gamepadBridgeScript]
     stdout: SplitParser {
       onRead: data => {
@@ -97,8 +98,18 @@ Item {
   // Mirrors the relevant branches of keyCatcher's Keys.onPressed above, so
   // gamepad buttons drive the exact same navigation as their keyboard
   // equivalents (left/right/up/down, confirm=Enter, back=Backspace,
-  // cancel=Escape, delete=Delete, pageup/pagedown=PageUp/PageDown).
+  // cancel=Escape, delete=Delete, pageup/pagedown=PageUp/PageDown). "summon"
+  // (the Guide/PS button) is handled first since it's the one action that's
+  // meaningful even while the menu is closed -- everything else is ignored
+  // until the menu is actually open.
   function dispatchAction(name) {
+    if (name === "summon") {
+      if (root.opened) root.cancel()
+      else root.openRoute("root")
+      return
+    }
+    if (!root.opened) return
+
     if (root.deleteConfirmOpen) {
       var keyForAction = ({
         up: Qt.Key_Up, down: Qt.Key_Down, left: Qt.Key_Left, right: Qt.Key_Right,

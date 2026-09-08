@@ -56,11 +56,19 @@ whose driver follows the standard Linux gamepad button convention, not just
 Xbox and PS5 pads.
 
 - D-pad or left stick: move the selection (held directions repeat)
+- Guide (Xbox) / PS button: open the menu, same as `SUPER + SPACE` — press again to close
 - A / Cross: confirm
 - B / Circle: go back a level (closes the menu at the top level)
 - Y / Triangle: uninstall the selected app, with confirmation
 - LB/L1, RB/R1: page up / page down
 - Menu/Options or View/Share: close the menu
+
+The Guide/PS button is read continuously in the background (the plugin is
+already kept loaded), not just while the menu is open. Whether it reaches the
+plugin depends on your controller's driver: most current xpad/xpadneo (Xbox)
+and hid-playstation (PS5 DualSense) setups report it, but some older or
+Bluetooth-only drivers don't forward that button at all, in which case only
+the in-menu controls above will work.
 
 ## Update
 

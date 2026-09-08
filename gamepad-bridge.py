@@ -51,6 +51,7 @@ BUTTON_ACTIONS = {
     ecodes.BTN_SELECT: "cancel",   # Xbox View / PS Share-Create
     ecodes.BTN_TL: "pageup",       # LB / L1
     ecodes.BTN_TR: "pagedown",     # RB / R1
+    ecodes.BTN_MODE: "summon",     # Xbox Guide button / PS button (center)
 }
 
 # A handful of pads report the D-pad as four discrete buttons instead of an
