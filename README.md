@@ -1,11 +1,9 @@
 # XMB Menu for Omarchy
 
-A full-screen, PS3-inspired cross-media-bar interface for Omarchy's main menu.
+A full-screen blurred, PS3-inspired cross-media-bar interface for Omarchy's main menu.
 It preserves the existing menu structure, application launcher, providers,
 actions, search, and `SUPER + SPACE` shortcut while replacing the presentation
 with an animated horizontal-and-vertical XMB layout.
-
-![XMB Menu preview](preview.png)
 
 ## Features
 
