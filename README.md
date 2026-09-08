@@ -29,7 +29,7 @@ application data already provided by the system.
 ## Install
 
 ```bash
-omarchy plugin add https://github.com/surfacedP/omarchy-xmb-menu.git --enable
+omarchy plugin add https://github.com/maiosx/xmb.git --enable
 ```
 
 Enabling the plugin routes the existing Omarchy menu shortcut to the XMB
