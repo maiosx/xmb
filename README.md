@@ -11,7 +11,7 @@ with an animated horizontal-and-vertical XMB layout.
 - Inline vertical item carousel
 - Global search across menu entries and applications
 - Animated translucent background ribbons
-- Keyboard, mouse-wheel, touchpad, and click navigation
+- Keyboard, mouse-wheel, touchpad, click, and gamepad navigation
 - Focused-monitor presentation
 - Existing Omarchy top bar remains unchanged
 - Reversible replacement for the packaged `omarchy.menu`
@@ -19,10 +19,14 @@ with an animated horizontal-and-vertical XMB layout.
 ## Requirements
 
 - Omarchy 4 / Quattro with the Quickshell plugin system
-- No third-party packages or services
+- No third-party packages or services required for core functionality
 
 The plugin reads Omarchy's existing menu definitions and uses the commands and
 application data already provided by the system.
+
+Gamepad navigation is optional and needs `python-evdev`
+(`sudo pacman -S python-evdev`). Without it the menu works exactly as before,
+just without controller input.
 
 ## Install
 
@@ -44,6 +48,19 @@ interface. The packaged menu is not modified.
 - Escape or `SUPER + SPACE`: close
 - Type: search all menu entries and applications
 - Delete: uninstall a selected application, with confirmation
+
+### Gamepad (Xbox and PS5/DualSense)
+
+Requires `python-evdev` (see Requirements above); works with any controller
+whose driver follows the standard Linux gamepad button convention, not just
+Xbox and PS5 pads.
+
+- D-pad or left stick: move the selection (held directions repeat)
+- A / Cross: confirm
+- B / Circle: go back a level (closes the menu at the top level)
+- Y / Triangle: uninstall the selected app, with confirmation
+- LB/L1, RB/R1: page up / page down
+- Menu/Options or View/Share: close the menu
 
 ## Update
 

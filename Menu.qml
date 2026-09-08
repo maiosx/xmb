@@ -66,6 +66,82 @@ Item {
     onTriggered: wallpaperResolver.running = true
   }
 
+  // Xbox/PS5 gamepad navigation, via a small evdev bridge script shipped
+  // alongside this plugin (see gamepad-bridge.py for the button/axis
+  // mapping). It prints one navigation token per line ("up", "confirm",
+  // etc.) which we feed into the same dispatchAction() used for keyboard
+  // input. Only runs while the menu is visible, same as the wallpaper
+  // resolver above; python-evdev not being installed just means no
+  // gamepad input, not a startup failure.
+  function localPath(url) {
+    var s = url.toString()
+    return s.indexOf("file://") === 0 ? s.substring(7) : s
+  }
+  readonly property string gamepadBridgeScript: root.localPath(Qt.resolvedUrl("gamepad-bridge.py"))
+
+  Process {
+    id: gamepadBridge
+    running: root.opened
+    command: ["python3", "-u", root.gamepadBridgeScript]
+    stdout: SplitParser {
+      onRead: data => {
+        const token = data.trim()
+        if (token) root.dispatchAction(token)
+      }
+    }
+    stderr: SplitParser {
+      onRead: data => { if (data.trim()) console.log("xmb-menu gamepad:", data.trim()) }
+    }
+  }
+
+  // Mirrors the relevant branches of keyCatcher's Keys.onPressed above, so
+  // gamepad buttons drive the exact same navigation as their keyboard
+  // equivalents (left/right/up/down, confirm=Enter, back=Backspace,
+  // cancel=Escape, delete=Delete, pageup/pagedown=PageUp/PageDown).
+  function dispatchAction(name) {
+    if (root.deleteConfirmOpen) {
+      var keyForAction = ({
+        up: Qt.Key_Up, down: Qt.Key_Down, left: Qt.Key_Left, right: Qt.Key_Right,
+        confirm: Qt.Key_Return, back: Qt.Key_Escape, cancel: Qt.Key_Escape
+      })[name]
+      if (keyForAction !== undefined) deleteConfirm.handleKey({ key: keyForAction })
+      return
+    }
+
+    if (name === "cancel") {
+      if (root.filterText) root.setFilter("")
+      else root.cancel()
+    } else if (name === "delete") {
+      root.requestDeleteSelected()
+    } else if (name === "back") {
+      if (root.filterText) root.setFilter("")
+      else if (!root.goBack()) root.cancel()
+    } else if (name === "left") {
+      if (root.filterText) return
+      if (root.activeMenu === "root") root.selectCategory(-1)
+      else if (root.activeMenuIsTopLevel()) root.selectCategory(-1)
+      else if (!root.goBack()) root.selectCategory(-1)
+    } else if (name === "right") {
+      if (root.filterText) return
+      if (root.activeMenu === "root") root.selectCategory(1)
+      else if (root.activeMenuIsTopLevel()) root.selectCategory(1)
+      else if (root.cursorActive) root.activateIndex(root.selectedIndex)
+    } else if (name === "up") {
+      if (root.activeMenu !== "root" || root.filterText) root.select(-1)
+    } else if (name === "down") {
+      if (root.activeMenu === "root" && !root.filterText) root.previewCategory(false)
+      else root.select(1)
+    } else if (name === "pageup") {
+      root.select(-6)
+    } else if (name === "pagedown") {
+      root.select(6)
+    } else if (name === "confirm") {
+      if (root.activeMenu === "root" && !root.filterText) root.activateCategory(false)
+      else if (root.dmenuActive && root.mode === "input") root.applyDmenuSelection(root.filterText)
+      else if (displayModel.count > 0) root.activateIndex(root.cursorActive ? root.selectedIndex : 0)
+    }
+  }
+
   // PS3-inspired XMB surface. The host creates this layer-shell window on the
   // focused output, matching the behavior of the packaged Omarchy menu.
   PanelWindow {
